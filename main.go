@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 )
 
@@ -54,17 +54,7 @@ func main() {
 		err = db.QueryRow(iniCounter, user, counter, 0).Scan(&value)
 		if err != nil {
 			log.Println(err)
-			if err, ok := err.(*pq.Error); ok {
-				switch err.Code.Name() {
-				case "unique_violation":
-					c.AbortWithStatus(409)
-				default:
-					log.Println(err.Code.Name())
-				}
-			} else {
-				log.Println(err)
-				c.AbortWithStatus(500)
-			}
+			c.AbortWithStatus(500)
 		} else {
 			c.String(http.StatusOK, "%s\n", value)
 		}
@@ -97,17 +87,8 @@ func main() {
 
 		err = db.QueryRow(incCounter, user, counter).Scan(&value)
 		if err != nil {
-			if err, ok := err.(*pq.Error); ok {
-				switch err.Code.Name() {
-				case "unique_violation":
-					c.AbortWithStatus(409)
-				default:
-					log.Println(err.Code.Name())
-				}
-			} else {
-				log.Println(err)
-				c.AbortWithStatus(500)
-			}
+			log.Println(err)
+			c.AbortWithStatus(500)
 		} else {
 			c.String(http.StatusOK, "")
 		}
@@ -121,23 +102,17 @@ func main() {
 
 		err = db.QueryRow(decCounter, user, counter).Scan(&value)
 		if err != nil {
-			if err, ok := err.(*pq.Error); ok {
-				switch err.Code.Name() {
-				case "unique_violation":
-					c.AbortWithStatus(409)
-				default:
-					log.Println(err.Code.Name())
-				}
-			} else {
-				log.Println(err)
-				c.AbortWithStatus(500)
-			}
+			log.Println(err)
+			c.AbortWithStatus(500)
 		} else {
 			c.String(http.StatusOK, "")
 		}
 	})
 
-	r.Run()
+	err = r.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func getEnv(key, fallback string) string {
