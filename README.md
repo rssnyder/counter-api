@@ -14,13 +14,13 @@ CREATE TABLE counters (
 
 ## usage
 
-endpoint: `https://api.counter.k8s.rileysnyder.dev/<user>/<counter>`
+endpoint: `https://counter.k8s.rileysnyder.dev/<user>/<counter>`
 
 create counter: `POST`
-- `curl -X POST localhost:8080/rssnyder/heartbeat`
+- `curl -X POST https://counter.k8s.rileysnyder.dev/rssnyder/heartbeat`
 increment counter: `HEAD`
-- `curl -I localhost:8080/rssnyder/heartbeat`
+- `curl -I https://counter.k8s.rileysnyder.dev/rssnyder/heartbeat`
 decrement counter: `DELETE`
-- `curl -X DELETE localhost:8080/rssnyder/heartbeat`
+- `curl -X DELETE https://counter.k8s.rileysnyder.dev/rssnyder/heartbeat`
 get counter: `GET`
-- `curl -X POST localhost:8080/rssnyder/heartbeat`
+- `curl https://counter.k8s.rileysnyder.dev/rssnyder/heartbeat`
