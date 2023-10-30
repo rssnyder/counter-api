@@ -34,11 +34,16 @@ builds:
 changelog:
   sort: asc
 dockers:
-  - dockerfile: Dockerfile
-  - image_templates:
+  - goos:
+    - linux
+    - darwin
+    goarch:
+    - amd64
+    - arm64
+    image_templates:
     - "gcr.io/rssnyder/counter-api:{{ .Tag }}"
     - "gcr.io/rssnyder/discord-bot:latest"
-  - build_flag_templates:
+    build_flag_templates:
     - "--pull"
     - "--label=org.opencontainers.image.created={{.Date}}"
     - "--label=org.opencontainers.image.title={{.ProjectName}}"

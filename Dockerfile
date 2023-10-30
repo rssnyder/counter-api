@@ -1,14 +1,7 @@
-FROM golang:1.21-alpine
+FROM scratch
+
 LABEL org.opencontainers.image.source https://github.com/rssnyder/counter-api
 
-WORKDIR /app
+COPY counter-api /
 
-COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
-
-COPY *.go ./
-
-RUN go build -o /counter-api
-
-ENTRYPOINT /counter-api
+ENTRYPOINT ["/counter-api"]
